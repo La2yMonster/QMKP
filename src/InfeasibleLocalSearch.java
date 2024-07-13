@@ -60,11 +60,12 @@ public class InfeasibleLocalSearch {
                 if (bestMove != null) {
                     valueContributionMatrix.updateMatrix(bestMove); // 执行最优动作并更新价值贡献矩阵
                     tabuList.updateTabuList(bestMove); // 更新禁忌表
+                    if (S.isFeasible() && S.getTotalValue() > SLocalBest.getTotalValue()) {
+                        SLocalBest = cloneSolution(S);
+                    }
                 } else {
-                    throw new IllegalStateException("Move is null");
-                }
-                if (S.isFeasible() && S.getTotalValue() > SLocalBest.getTotalValue()) {
-                    SLocalBest = cloneSolution(S);
+//                    throw new IllegalStateException("Move is null");
+                    continue;
                 }
             }
 
@@ -156,7 +157,7 @@ public class InfeasibleLocalSearch {
         Knapsack otherKnapsack = null;
 
         for (Knapsack knapsack : S.getKnapsacks()) {
-            if (knapsack != selectedKnapsack && knapsack.getTotalWeight() > selectedKnapsack.getTotalWeight()) {
+            if (knapsack != selectedKnapsack && knapsack.getTotalWeight() >= selectedKnapsack.getTotalWeight()) {
                 for (Item item : knapsack.getItems()) {
                     double gain = valueContributionMatrix.getNormReallocationGain(beta, item, knapsack, selectedKnapsack);
                     if (gain > bestGain) {
