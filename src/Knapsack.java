@@ -4,8 +4,9 @@ import java.util.Objects;
 import java.util.HashSet;
 
 public class Knapsack {
-    private int id; // 背包ID
+    private final int id; // 背包ID
     private double capacity; // 背包容量
+    private double totalWeight;//背包负载
     private List<Item> items; // 背包中的物品列表
 
     // 构造函数，初始化背包的id和容量
@@ -22,22 +23,13 @@ public class Knapsack {
         if (obj == null || getClass() != obj.getClass()) return false;
 
         Knapsack otherKnapsack = (Knapsack) obj;
-
-        // 比较id和容量
-        if (id != otherKnapsack.id) return false;
-        if (Double.compare(otherKnapsack.capacity, capacity) != 0) return false;
-
-        // 比较物品集合，忽略顺序
-        HashSet<Item> thisItemsSet = new HashSet<>(items);
-        HashSet<Item> otherItemsSet = new HashSet<>(otherKnapsack.items);
-
-        return thisItemsSet.equals(otherItemsSet);
+        return id == otherKnapsack.id;
     }
 
-    // 重写hashCode方法，生成基于背包id、容量和物品列表的哈希值
+    // 重写hashCode方法，生成基于背包id
     @Override
     public int hashCode() {
-        return Objects.hash(id, items, capacity);
+        return Objects.hash(id);
     }
 
     // 获取背包的id
@@ -57,7 +49,8 @@ public class Knapsack {
 
     // 获取背包中的物品总重量
     public double getTotalWeight() {
-        return items.stream().mapToDouble(Item::getWeight).sum();
+        totalWeight=items.stream().mapToDouble(Item::getWeight).sum();
+        return totalWeight;
     }
 
     // 获取背包中的物品总价值，包括二次价值

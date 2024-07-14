@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,7 +81,7 @@ public class ValueContributionMatrix {
                     knapsack2Id = knapsack2.getId();
                     // 如果是交换操作，从knapsack1中移出item1，将item2移入knapsack1
                     for (Item j : knapsack1.getItems()) {
-                        if (!j.equals(item1)) {
+                        if (!j.equals(item1) && !j.equals(item2)) {
                             int jId = j.getId();
                             matrix.get(jId).put(knapsack1Id, matrix.get(jId).get(knapsack1Id) - item1.getQuadraticValue(j) + item2.getQuadraticValue(j));
                         }
@@ -90,7 +91,7 @@ public class ValueContributionMatrix {
 
                     // 从knapsack2中移出item2，将item1移入knapsack2
                     for (Item j : knapsack2.getItems()) {
-                        if (!j.equals(item2)) {
+                        if (!j.equals(item1) && !j.equals(item2)) {
                             int jId = j.getId();
                             matrix.get(jId).put(knapsack2Id, matrix.get(jId).get(knapsack2Id) - item2.getQuadraticValue(j) + item1.getQuadraticValue(j));
                         }
@@ -100,7 +101,7 @@ public class ValueContributionMatrix {
                 } else {
                     // 如果只有一个knapsack2，从knapsack1中移出item1，将item2移入knapsack1
                     for (Item j : knapsack1.getItems()) {
-                        if (!j.equals(item1)) {
+                        if (!j.equals(item1) && !j.equals(item2)) {
                             int jId = j.getId();
                             matrix.get(jId).put(knapsack1Id, matrix.get(jId).get(knapsack1Id) - item1.getQuadraticValue(j) + item2.getQuadraticValue(j));
                         }
@@ -130,50 +131,33 @@ public class ValueContributionMatrix {
     public double getValueContribution(Item item, Knapsack knapsack) {
         int itemId = item.getId();
         int knapsackId = knapsack.getId();
+        Map<Integer, Map<Integer, Double>> matrix = this.getMatrix();
 
-        if (matrix.containsKey(itemId) && matrix.get(itemId).containsKey(knapsackId)) {
-            return matrix.get(itemId).get(knapsackId); // 返回物品在背包中的贡献值
+        return matrix.get(itemId).get(knapsackId); // 返回物品在背包中的贡献值
+    }
+
+    // 克隆矩阵
+    public ValueContributionMatrix cloneValueContributionMatrix() {
+        ValueContributionMatrix clonedMatrix = new ValueContributionMatrix(new ArrayList<>(), new ArrayList<>());
+        Map<Integer, Map<Integer, Double>> clonedData = new HashMap<>();
+
+        for (Map.Entry<Integer, Map<Integer, Double>> entry : matrix.entrySet()) {
+            Integer itemId = entry.getKey();
+            Map<Integer, Double> knapsackContributions = entry.getValue();
+            Map<Integer, Double> clonedContributions = new HashMap<>();
+
+            for (Map.Entry<Integer, Double> knapsackEntry : knapsackContributions.entrySet()) {
+                clonedContributions.put(knapsackEntry.getKey(), knapsackEntry.getValue());
+            }
+
+            clonedData.put(itemId, clonedContributions);
         }
-        return 0.0; // 如果物品不在背包中，返回0
+
+        clonedMatrix.matrix = clonedData;
+        return clonedMatrix;
     }
 
-    // 计算物品对背包的价值密度
-    public double getValueDensity(Item item, Knapsack knapsack) {
-        return getValueContribution(item, knapsack) / item.getWeight(); // 返回物品对背包的价值密度
+    public Map<Integer, Map<Integer, Double>> getMatrix() {
+        return matrix;
     }
-
-    // 获取抽取操作的收益
-    public double getExtractionGain(Item item, Knapsack knapsack) {
-        return -this.getValueContribution(item, knapsack); // 返回抽取操作的收益，为负贡献值
-    }
-
-    // 获取插入操作的收益
-    public double getInsertionGain(Item item, Knapsack knapsack) {
-        return this.getValueContribution(item, knapsack); // 返回插入操作的收益，为正贡献值
-    }
-
-    // 获取重新分配操作的收益
-    public double getReallocationGain(Item item, Knapsack fromKnapsack, Knapsack toKnapsack) {
-        return this.getValueContribution(item, toKnapsack) - this.getValueContribution(item, fromKnapsack); // 返回重新分配操作的收益
-    }
-
-    // 获取归一化重新分配操作的收益
-    public double getNormReallocationGain(double beta, Item item, Knapsack fromKnapsack, Knapsack toKnapsack) {
-        return (this.getValueContribution(item, toKnapsack) - this.getValueContribution(item, fromKnapsack))
-                / Math.pow(item.getWeight(), beta); // 返回归一化重新分配操作的收益
-    }
-
-    // 获取交换操作的收益
-    public double getExchangeGain(Item item1, Item item2, Knapsack knapsack1, Knapsack knapsack2) {
-        if (knapsack2 != null) {
-            // 如果有两个背包，返回交换操作的收益
-            return this.getValueContribution(item1, knapsack2) - this.getValueContribution(item1, knapsack1)
-                    + this.getValueContribution(item2, knapsack1) - this.getValueContribution(item2, knapsack2)
-                    - 2 * item1.getQuadraticValue(item2);
-        }
-        // 如果只有一个背包，返回交换操作的收益
-        return this.getValueContribution(item2, knapsack1) - this.getValueContribution(item1, knapsack1)
-                - item1.getQuadraticValue(item2);
-    }
-
 }

@@ -3,7 +3,7 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Item {
-    private int id; // 唯一标识符
+    private final int id; // 唯一标识符
     private double weight; // 重量
     private double value; // 价值
     private Map<Integer, Double> quadraticValues; // 物品对的二次价值
@@ -29,7 +29,7 @@ public class Item {
     // 重写hashCode方法，生成基于物品id、重量、价值和二次价值的哈希值
     @Override
     public int hashCode() {
-        return Objects.hash(id, weight, value, quadraticValues);
+        return Objects.hash(id);
     }
 
     // 获取物品的id
@@ -45,10 +45,6 @@ public class Item {
     // 获取物品的价值
     public double getValue() {
         return value;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setWeight(double weight) {

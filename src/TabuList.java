@@ -1,13 +1,14 @@
 import java.util.*;
 
 public class TabuList {
-
+    public static final double ALPHA = 0.1; // Tabu tenure management factor
     private Map<Move, Integer> tabuList; // 禁忌表，存储禁忌移动及其禁忌期限
     private int tabuTenure; // 禁忌期限
 
     // 构造函数，初始化禁忌期限
-    public TabuList(List<Item> allItems, double alpha) {
-        this.tabuTenure = (int) Math.ceil(allItems.size() * alpha); // 根据物品数量和alpha计算禁忌期限
+    public TabuList() {
+        List<Item> allItems=TabuSearchAlgorithm.getAllItems();
+        this.tabuTenure = (int) Math.ceil(allItems.size() * ALPHA); // 根据物品数量和alpha计算禁忌期限
         this.tabuList = new LinkedHashMap<>(); // 使用LinkedHashMap保持插入顺序
     }
 
