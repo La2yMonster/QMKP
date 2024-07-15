@@ -5,14 +5,14 @@ public class Solution {
     private double totalValue; // 解的总价值
     private Map<Knapsack, Double> knapsackOverload; // 不可行度（DI），每个背包的超载重量
     private double infeasibilityDegree; // 总不可行度（总超载部分）
-    private  ValueContributionMatrix valueContributionMatrix;//解的价值贡献矩阵
+//    private  ValueContributionMatrix valueContributionMatrix;//解的价值贡献矩阵
     private List<Item> unassignedItems;//解的没有分配物品
 
     // 构造函数，初始化解
-    public Solution(List<Knapsack> knapsacks,ValueContributionMatrix valueContributionMatrix) {
+    public Solution(List<Knapsack> knapsacks) {
         this.knapsacks = knapsacks;
         this.totalValue = knapsacks.stream().mapToDouble(Knapsack::getTotalValue).sum();// 计算总价值
-        this.valueContributionMatrix=valueContributionMatrix;
+//        this.valueContributionMatrix=valueContributionMatrix;
         this.knapsackOverload = new HashMap<>();
         this.unassignedItems = new ArrayList<>(TabuSearchAlgorithm.getAllItems());
 

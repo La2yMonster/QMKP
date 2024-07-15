@@ -4,13 +4,12 @@ public class FeasibleLocalSearch {
     private static Solution initialSolution; // 初始解
     private static Solution S; // 当前解
     private static Solution SLocalBest; // 局部最优解
-    private static TabuList tabuList; // 禁忌表
 
     // 执行可行局部搜索
     public static void performFeasibleLocalSearch(Solution initialSolution, int Ncons) {
         int n = 0; // 计数器
         ValueContributionMatrix valueContributionMatrix=initialSolution.getValueContributionMatrix();
-        tabuList=new TabuList();
+        TabuList tabuList=new TabuList();
         S=initialSolution;//当前解
         FeasibleLocalSearch.initialSolution=S.cloneSolution();// 初始解
         SLocalBest = S.cloneSolution(); // 初始局部最优解

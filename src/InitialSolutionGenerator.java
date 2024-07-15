@@ -7,7 +7,8 @@ public class InitialSolutionGenerator {
     public static Solution generateInitialSolution(List<Item> items, List<Knapsack> knapsacks) {
         Random random = new Random();
         ValueContributionMatrix valueContributionMatrix=new ValueContributionMatrix(items, knapsacks);
-        Solution initialSolution=new Solution(knapsacks,valueContributionMatrix);
+//        Solution initialSolution=new Solution(knapsacks,valueContributionMatrix);
+        Solution initialSolution=new Solution(knapsacks);
         List<Item> unassignedItems = initialSolution.getUnassignedItems();
 
         // 遍历每一个背包

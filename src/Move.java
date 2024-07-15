@@ -58,39 +58,55 @@ public class Move {
         this.moveGain = moveGain;
     }
 
+    //计算移动增益，此时move还没有被执行
     public void calculateMoveGain(Solution solution){
         double moveGain;
-        ValueContributionMatrix valueContributionMatrix=solution.getValueContributionMatrix();
-        ValueContributionMatrix cloneValueContributionMatrix;
+        ValueContributionMatrix valueContributionMatrix=solution.getValueContributionMatrix();//此时valueContributionMatrix还没有被更新
+//        ValueContributionMatrix cloneValueContributionMatrix;
 
         switch (moveType){
             case  EXTRACTION:
                 moveGain=-valueContributionMatrix.getValueContribution(item1,knapsack1); // 返回抽取操作的收益，为负贡献值
                 break;
-            case INSERTION://插入情况比较特殊，只有执行完插入操作后才能得到移动增益
-                cloneValueContributionMatrix=solution.getValueContributionMatrix().cloneValueContributionMatrix();
-                cloneValueContributionMatrix.updateMatrix(this);//克隆的价值贡献矩阵模拟插入后的情况
-                moveGain=cloneValueContributionMatrix.getValueContribution(item1,knapsack1); // 返回插入操作的收益，为正贡献值
+            case INSERTION:
+//                cloneValueContributionMatrix=solution.getValueContributionMatrix().cloneValueContributionMatrix();
+//                cloneValueContributionMatrix.updateMatrix(this);//克隆的价值贡献矩阵模拟插入后的情况
+//                moveGain=cloneValueContributionMatrix.getValueContribution(item1,knapsack1); // 返回插入操作的收益，为正贡献值
+                moveGain= valueContributionMatrix.computeValueContribution(item1,knapsack1);
                 break;
             case REALLOCATION:
-                cloneValueContributionMatrix=solution.getValueContributionMatrix().cloneValueContributionMatrix();
-                cloneValueContributionMatrix.updateMatrix(this);//克隆的价值贡献矩阵模拟重分配后的情况
-                //公式前半部分应为重分配后的矩阵，后半部分为重分配前的矩阵
-                moveGain=cloneValueContributionMatrix.getValueContribution(item1,knapsack2) - valueContributionMatrix.getValueContribution(item1,knapsack1); // 返回重新分配操作的收益
+//                cloneValueContributionMatrix=solution.getValueContributionMatrix().cloneValueContributionMatrix();
+//                cloneValueContributionMatrix.updateMatrix(this);//克隆的价值贡献矩阵模拟重分配后的情况
+//                //公式前半部分应为重分配后的矩阵，后半部分为重分配前的矩阵
+//                moveGain=cloneValueContributionMatrix.getValueContribution(item1,knapsack2) - valueContributionMatrix.getValueContribution(item1,knapsack1); // 返回重新分配操作的收益
+                moveGain=valueContributionMatrix.computeValueContribution(item1,knapsack2)-valueContributionMatrix.getValueContribution(item1,knapsack1);
                 break;
             case EXCHANGE:
-                cloneValueContributionMatrix=solution.getValueContributionMatrix().cloneValueContributionMatrix();
-                cloneValueContributionMatrix.updateMatrix(this);//克隆的价值贡献矩阵模拟交换后的情况
-                if (knapsack2 != null) {
+//                cloneValueContributionMatrix=solution.getValueContributionMatrix().cloneValueContributionMatrix();
+//                cloneValueContributionMatrix.updateMatrix(this);//克隆的价值贡献矩阵模拟交换后的情况
+//                if (knapsack2 != null) {
+//                    // 如果有两个背包，返回交换操作的收益
+////                    moveGain=cloneValueContributionMatrix.getValueContribution(item1, knapsack2) - valueContributionMatrix.getValueContribution(item1, knapsack1)
+////                            + cloneValueContributionMatrix.getValueContribution(item2, knapsack1) - valueContributionMatrix.getValueContribution(item2, knapsack2)
+////                            - 2 * item1.getQuadraticValue(item2);
+//                    moveGain=cloneValueContributionMatrix.getValueContribution(item1, knapsack2) - valueContributionMatrix.getValueContribution(item1, knapsack1)
+//                            + cloneValueContributionMatrix.getValueContribution(item2, knapsack1) - valueContributionMatrix.getValueContribution(item2, knapsack2);
+//                            //- 2 * item1.getQuadraticValue(item2)这一项在updateMatrix中考虑到了，此处不用重复考虑
+//                }
+//                else {
+//                    // 如果只有一个背包，返回交换操作的收益
+//                    moveGain= cloneValueContributionMatrix.getValueContribution(item2, knapsack1) - valueContributionMatrix.getValueContribution(item1, knapsack1)
+//                            - item1.getQuadraticValue(item2);
+//                }
+                if (knapsack2!=null){
                     // 如果有两个背包，返回交换操作的收益
-                    moveGain=cloneValueContributionMatrix.getValueContribution(item1, knapsack2) - valueContributionMatrix.getValueContribution(item1, knapsack1)
-                            + cloneValueContributionMatrix.getValueContribution(item2, knapsack1) - valueContributionMatrix.getValueContribution(item2, knapsack2)
-                            - 2 * item1.getQuadraticValue(item2);
+                    moveGain= valueContributionMatrix.computeValueContribution(item1,knapsack2)- valueContributionMatrix.getValueContribution(item1,knapsack1)
+                    + valueContributionMatrix.computeValueContribution(item2,knapsack1)- valueContributionMatrix.getValueContribution(item2,knapsack2)
+                    -2*item1.getQuadraticValue(item2);
                 }
                 else {
                     // 如果只有一个背包，返回交换操作的收益
-                    moveGain= cloneValueContributionMatrix.getValueContribution(item2, knapsack1) - valueContributionMatrix.getValueContribution(item1, knapsack1)
-                            - item1.getQuadraticValue(item2);
+                    moveGain= valueContributionMatrix.computeValueContribution(item2,knapsack1)- valueContributionMatrix.getValueContribution(item1,knapsack1);
                 }
                 break;
             default:

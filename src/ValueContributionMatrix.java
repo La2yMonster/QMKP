@@ -22,7 +22,7 @@ public class ValueContributionMatrix {
         }
     }
 
-    // 更新矩阵
+    // 更新矩阵，此处move是被执行过了的
     public void updateMatrix(Move move) {
         Item item1 = move.getItem1();
         Item item2 = move.getItem2();
@@ -38,10 +38,14 @@ public class ValueContributionMatrix {
             case EXTRACTION:
                 // 如果是抽取操作，从knapsack1中移出item1
                 for (Item j : knapsack1.getItems()) {
-                    if (!j.equals(item1)) {
-                        int jId = j.getId();
-                        matrix.get(jId).put(knapsack1Id, matrix.get(jId).get(knapsack1Id) - item1.getQuadraticValue(j));
-                    }
+//                    if (!j.equals(item1)) {
+//                        int jId = j.getId();
+//                        matrix.get(jId).put(knapsack1Id, matrix.get(jId).get(knapsack1Id) - item1.getQuadraticValue(j));
+//                    }
+
+                    int jId = j.getId();
+                    matrix.get(jId).put(knapsack1Id, matrix.get(jId).get(knapsack1Id) - item1.getQuadraticValue(j));
+
                 }
                 matrix.get(item1Id).put(knapsack1Id, 0.0); // 更新item1在knapsack1中的贡献值为0
                 break;
@@ -58,10 +62,14 @@ public class ValueContributionMatrix {
             case REALLOCATION:
                 // 如果是重新分配操作，从knapsack1中移出item1
                 for (Item j : knapsack1.getItems()) {
-                    if (!j.equals(item1)) {
+//                    if (!j.equals(item1)) {
+//                        int jId = j.getId();
+//                        matrix.get(jId).put(knapsack1Id, matrix.get(jId).get(knapsack1Id) - item1.getQuadraticValue(j));
+//                    }
+
                         int jId = j.getId();
                         matrix.get(jId).put(knapsack1Id, matrix.get(jId).get(knapsack1Id) - item1.getQuadraticValue(j));
-                    }
+
                 }
                 matrix.get(item1Id).put(knapsack1Id, 0.0); // 更新item1在knapsack1中的贡献值为0
 
@@ -81,7 +89,11 @@ public class ValueContributionMatrix {
                     knapsack2Id = knapsack2.getId();
                     // 如果是交换操作，从knapsack1中移出item1，将item2移入knapsack1
                     for (Item j : knapsack1.getItems()) {
-                        if (!j.equals(item1) && !j.equals(item2)) {
+//                        if (!j.equals(item1) && !j.equals(item2)) {
+//                            int jId = j.getId();
+//                            matrix.get(jId).put(knapsack1Id, matrix.get(jId).get(knapsack1Id) - item1.getQuadraticValue(j) + item2.getQuadraticValue(j));
+//                        }
+                        if (!j.equals(item2)) {
                             int jId = j.getId();
                             matrix.get(jId).put(knapsack1Id, matrix.get(jId).get(knapsack1Id) - item1.getQuadraticValue(j) + item2.getQuadraticValue(j));
                         }
@@ -91,7 +103,11 @@ public class ValueContributionMatrix {
 
                     // 从knapsack2中移出item2，将item1移入knapsack2
                     for (Item j : knapsack2.getItems()) {
-                        if (!j.equals(item1) && !j.equals(item2)) {
+//                        if (!j.equals(item1) && !j.equals(item2)) {
+//                            int jId = j.getId();
+//                            matrix.get(jId).put(knapsack2Id, matrix.get(jId).get(knapsack2Id) - item2.getQuadraticValue(j) + item1.getQuadraticValue(j));
+//                        }
+                        if (!j.equals(item1)) {
                             int jId = j.getId();
                             matrix.get(jId).put(knapsack2Id, matrix.get(jId).get(knapsack2Id) - item2.getQuadraticValue(j) + item1.getQuadraticValue(j));
                         }
@@ -99,9 +115,13 @@ public class ValueContributionMatrix {
                     matrix.get(item2Id).put(knapsack2Id, 0.0); // 更新item2在knapsack2中的贡献值为0
                     matrix.get(item1Id).put(knapsack2Id, computeValueContribution(item1, knapsack2)); // 计算并更新item1在knapsack2中的贡献值
                 } else {
-                    // 如果只有一个knapsack2，从knapsack1中移出item1，将item2移入knapsack1
+                    // 如果只有一个knapsack1，从knapsack1中移出item1，将item2移入knapsack1
                     for (Item j : knapsack1.getItems()) {
-                        if (!j.equals(item1) && !j.equals(item2)) {
+//                        if (!j.equals(item1) && !j.equals(item2)) {
+//                            int jId = j.getId();
+//                            matrix.get(jId).put(knapsack1Id, matrix.get(jId).get(knapsack1Id) - item1.getQuadraticValue(j) + item2.getQuadraticValue(j));
+//                        }
+                        if (!j.equals(item2)) {
                             int jId = j.getId();
                             matrix.get(jId).put(knapsack1Id, matrix.get(jId).get(knapsack1Id) - item1.getQuadraticValue(j) + item2.getQuadraticValue(j));
                         }
@@ -114,7 +134,7 @@ public class ValueContributionMatrix {
     }
 
     // 计算给定物品和背包的贡献值
-    private double computeValueContribution(Item item, Knapsack knapsack) {
+    public double computeValueContribution(Item item, Knapsack knapsack) {
         double profitValue = item.getValue(); // 物品的利润值
         double jointValues = 0.0; // 物品与其他物品的联合价值
 
