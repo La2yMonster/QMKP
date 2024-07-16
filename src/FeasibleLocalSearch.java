@@ -37,9 +37,9 @@ public class FeasibleLocalSearch {
         Neighborhood neighborhood=new Neighborhood(solution);
 
         neighborhood.addMoves(Neighborhood.generateExtractionNeighborhoodMoves(solution));// 生成抽取邻域
-        neighborhood.addMoves(Neighborhood.generateInsertionNeighborhoodMoves(solution));// 生成插入邻域
-        neighborhood.addMoves(Neighborhood.generateReallocationNeighborhoodMoves(solution));// 生成重分配邻域
-        neighborhood.addMoves(Neighborhood.generateExchangeNeighborhoodMoves(solution));// 生成交换邻域
+        neighborhood.addMoves(Neighborhood.generateInsertionNeighborhoodMoves(solution,true));// 生成插入邻域
+        neighborhood.addMoves(Neighborhood.generateReallocationNeighborhoodMoves(solution,true));// 生成重分配邻域
+        neighborhood.addMoves(Neighborhood.generateExchangeNeighborhoodMoves(solution,true));// 生成交换邻域
 
         return neighborhood;
     }

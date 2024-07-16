@@ -56,9 +56,9 @@ public class InfeasibleLocalSearch {
         Neighborhood neighborhood = new Neighborhood(solution);
 
         // 插入、重分配和交换邻域构造
-        neighborhood.addMoves(Neighborhood.generateInsertionNeighborhoodMoves(solution));
-        neighborhood.addMoves(Neighborhood.generateReallocationNeighborhoodMoves(solution));
-        neighborhood.addMoves(Neighborhood.generateExchangeNeighborhoodMoves(solution));
+        neighborhood.addMoves(Neighborhood.generateInsertionNeighborhoodMoves(solution,true));
+        neighborhood.addMoves(Neighborhood.generateReallocationNeighborhoodMoves(solution,true));
+        neighborhood.addMoves(Neighborhood.generateExchangeNeighborhoodMoves(solution,true));
 
         return neighborhood;
     }

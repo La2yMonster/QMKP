@@ -43,13 +43,13 @@ public class Neighborhood {
     }
 
     // 生成插入邻域
-    public static Set<Move> generateInsertionNeighborhoodMoves(Solution solution) {
+    public static Set<Move> generateInsertionNeighborhoodMoves(Solution solution,boolean considerConstraint) {
         Set<Move> moves=new HashSet<>();
         Set<Knapsack> knapsacks=solution.getKnapsacks();
 
         for (Knapsack knapsack : knapsacks) {
             for (Item item : solution.getUnassignedItems()) {
-                if (MoveOperator.canInsert(item, knapsack)) {
+                if (considerConstraint ?MoveOperator.canInsert(item, knapsack):true) {
                     Move move = new Move(Move.MoveType.INSERTION, item, null, knapsack, null);
                     move.calculateMoveGain(solution);
                     moves.add(move);
@@ -60,14 +60,14 @@ public class Neighborhood {
     }
 
     // 生成重分配邻域
-    public static Set<Move> generateReallocationNeighborhoodMoves(Solution solution) {
+    public static Set<Move> generateReallocationNeighborhoodMoves(Solution solution,boolean considerConstraint) {
         Set<Move> moves=new HashSet<>();
         Set<Knapsack> knapsacks=solution.getKnapsacks();
 
         for (Knapsack fromKnapsack : knapsacks) {
             for (Item item : fromKnapsack.getItems()) {
                 for (Knapsack toKnapsack : knapsacks) {
-                    if (fromKnapsack != toKnapsack && MoveOperator.canReallocate(item, fromKnapsack, toKnapsack)) {
+                    if (fromKnapsack != toKnapsack && (considerConstraint? MoveOperator.canReallocate(item, fromKnapsack, toKnapsack):true)) {
                         Move move = new Move(Move.MoveType.REALLOCATION, item, null, fromKnapsack, toKnapsack);
                         move.calculateMoveGain(solution);
                         moves.add(move);
@@ -79,7 +79,7 @@ public class Neighborhood {
     }
 
     // 生成交换邻域
-    public static Set<Move> generateExchangeNeighborhoodMoves(Solution solution) {
+    public static Set<Move> generateExchangeNeighborhoodMoves(Solution solution,boolean considerConstraint) {
         Set<Move> moves=new HashSet<>();
         List<Knapsack> knapsacks=new ArrayList<>(solution.getKnapsacks());
 
@@ -90,7 +90,7 @@ public class Neighborhood {
                 // case 1: 交换不同背包中的两个已分配物品
                 for (Item item1 : knapsack1.getItems()) {
                     for (Item item2 : knapsack2.getItems()) {
-                        if (MoveOperator.canExchange(item1, item2, knapsack1, knapsack2)) {
+                        if (considerConstraint? MoveOperator.canExchange(item1, item2, knapsack1, knapsack2):true) {
                             Move move = new Move(Move.MoveType.EXCHANGE, item1, item2, knapsack1, knapsack2);
                             move.calculateMoveGain(solution);
                             moves.add(move);
@@ -101,7 +101,7 @@ public class Neighborhood {
             // case 2: 交换背包中的一个已分配物品与一个未分配物品
             for (Item item1 : knapsack1.getItems()) {
                 for (Item unassignedItem : solution.getUnassignedItems()) {
-                    if (MoveOperator.canExchange(item1, unassignedItem, knapsack1, null)) {
+                    if (considerConstraint?MoveOperator.canExchange(item1, unassignedItem, knapsack1, null):true) {
                         Move move = new Move(Move.MoveType.EXCHANGE, item1, unassignedItem, knapsack1, null);
                         move.calculateMoveGain(solution);
                         moves.add(move);

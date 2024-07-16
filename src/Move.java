@@ -25,6 +25,29 @@ public class Move {
         this.moveGain=0;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Move move = (Move) o;
+        return moveType == move.moveType &&
+                Objects.equals(item1 != null ? item1.getId() : null, move.item1 != null ? move.item1.getId() : null) &&
+                Objects.equals(item2 != null ? item2.getId() : null, move.item2 != null ? move.item2.getId() : null) &&
+                Objects.equals(knapsack1 != null ? knapsack1.getId() : null, move.knapsack1 != null ? move.knapsack1.getId() : null) &&
+                Objects.equals(knapsack2 != null ? knapsack2.getId() : null, move.knapsack2 != null ? move.knapsack2.getId() : null);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                moveType,
+                item1 != null ? item1.getId() : null,
+                item2 != null ? item2.getId() : null,
+                knapsack1 != null ? knapsack1.getId() : null,
+                knapsack2 != null ? knapsack2.getId() : null
+        );
+    }
+
     // 获取移动类型
     public MoveType getMoveType() {
         return moveType;
@@ -128,29 +151,6 @@ public class Move {
 //        cloneValueContributionMatrix.updateMatrix();//克隆的价值贡献矩阵模拟重分配后的情况
         moveGain= ValueContributionMatrix.computeValueContribution(item1, knapsack2) - valueContributionMatrix.getValueContribution(item1, knapsack1);
         return moveGain/ Math.pow(item1.getWeight(), beta); // 返回归一化重新分配操作的收益
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Move move = (Move) o;
-        return moveType == move.moveType &&
-                Objects.equals(item1 != null ? item1.getId() : null, move.item1 != null ? move.item1.getId() : null) &&
-                Objects.equals(item2 != null ? item2.getId() : null, move.item2 != null ? move.item2.getId() : null) &&
-                Objects.equals(knapsack1 != null ? knapsack1.getId() : null, move.knapsack1 != null ? move.knapsack1.getId() : null) &&
-                Objects.equals(knapsack2 != null ? knapsack2.getId() : null, move.knapsack2 != null ? move.knapsack2.getId() : null);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                moveType,
-                item1 != null ? item1.getId() : null,
-                item2 != null ? item2.getId() : null,
-                knapsack1 != null ? knapsack1.getId() : null,
-                knapsack2 != null ? knapsack2.getId() : null
-        );
     }
 
     // 重写toString方法，返回移动的字符串表示
