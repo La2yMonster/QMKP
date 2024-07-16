@@ -12,6 +12,7 @@ public class MoveOperator {
         int knapsackId = knapsack.getId();
 
         knapsack.getItems().remove(item);//执行操作
+        solution.getUnassignedItems().add(item);
 
         //增量更新背包
         double knapsackTotalWeight= knapsack.getTotalWeight()-item.getWeight();
@@ -27,7 +28,6 @@ public class MoveOperator {
         double oldOverload=Math.max(0,knapsack.getTotalWeight()+item.getWeight()-knapsack.getCapacity());
         double newOverload=Math.max(0,knapsack.getTotalWeight()-knapsack.getCapacity());
         double solutionInfeasibilityDegree=solution.getInfeasibilityDegree()-oldOverload+newOverload;
-        solution.getUnassignedItems().add(item);
         solution.updateSolution(solutionTotalValue,solutionInfeasibilityDegree,solution.getUnassignedItems());
 
         //增量更新价值贡献矩阵
@@ -55,6 +55,7 @@ public class MoveOperator {
         int knapsackId = knapsack.getId();
 
         knapsack.getItems().add(item);//执行操作
+        solution.getUnassignedItems().remove(item);
 
         //增量更新背包
         double knapsackTotalWeight=knapsack.getTotalWeight()+item.getWeight();
@@ -70,7 +71,6 @@ public class MoveOperator {
         double oldOverload=Math.max(0,knapsack.getTotalWeight()-item.getWeight()-knapsack.getCapacity());
         double newOverload=Math.max(0,knapsack.getTotalWeight()-knapsack.getCapacity());
         double solutionInfeasibilityDegree=solution.getInfeasibilityDegree()-oldOverload+newOverload;
-        solution.getUnassignedItems().remove(item);
         solution.updateSolution(solutionTotalValue,solutionInfeasibilityDegree,solution.getUnassignedItems());
 
         //增量更新价值贡献矩阵
@@ -121,8 +121,8 @@ public class MoveOperator {
 
         double knapsack2TotalWeight=knapsack2.getTotalWeight()+item.getWeight();
         double knap2QuadraSum=0;
-        for (Item eachItem: knapsack2.getItems()){
-            knap2QuadraSum+=item.getQuadraticValue(eachItem);
+        for (Item j: knapsack2.getItems()){
+            knap2QuadraSum+=item.getQuadraticValue(j);
         }
         double knapsack2TotalValue=knapsack2.getTotalValue()+item.getValue()+knap2QuadraSum;
         knapsack2.updateKnapsack(knapsack2TotalWeight,knapsack2TotalValue,knapsack2.getItems());
@@ -187,6 +187,9 @@ public class MoveOperator {
         if (knapsack2 != null) {
             knapsack2.getItems().remove(item2);
             knapsack2.getItems().add(item1);
+        }else {
+            solution.getUnassignedItems().remove(item2);
+            solution.getUnassignedItems().add(item1);
         }
 
         //增量更新背包

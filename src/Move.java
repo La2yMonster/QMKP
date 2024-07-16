@@ -107,7 +107,8 @@ public class Move {
                 }
                 else {
                     // 如果只有一个背包，返回交换操作的收益
-                    moveGain= ValueContributionMatrix.computeValueContribution(item2,knapsack1)- valueContributionMatrix.getValueContribution(item1,knapsack1);
+                    moveGain= ValueContributionMatrix.computeValueContribution(item2,knapsack1)- valueContributionMatrix.getValueContribution(item1,knapsack1)
+                    -item1.getQuadraticValue(item2);
                 }
                 break;
             default:
@@ -119,14 +120,14 @@ public class Move {
     }
 
     // 获取归一化重新分配操作的收益
-    public void calNormReallocationGain(Solution solution) {
+    public double calNormReallocationGain(Solution solution) {
         double beta=TabuSearchAlgorithm.BETA;
         ValueContributionMatrix valueContributionMatrix=TabuSearchAlgorithm.getValueContributionMatrix();
 //        ValueContributionMatrix valueContributionMatrix=TabuSearchAlgorithm.getValueContributionMatrix();
 //        ValueContributionMatrix cloneValueContributionMatrix=TabuSearchAlgorithm.getValueContributionMatrix().cloneValueContributionMatrix();
 //        cloneValueContributionMatrix.updateMatrix();//克隆的价值贡献矩阵模拟重分配后的情况
-        moveGain= (ValueContributionMatrix.computeValueContribution(item1, knapsack2) - valueContributionMatrix.getValueContribution(item1, knapsack1))
-                / Math.pow(item1.getWeight(), beta); // 返回归一化重新分配操作的收益
+        moveGain= ValueContributionMatrix.computeValueContribution(item1, knapsack2) - valueContributionMatrix.getValueContribution(item1, knapsack1);
+        return moveGain/ Math.pow(item1.getWeight(), beta); // 返回归一化重新分配操作的收益
     }
 
     @Override

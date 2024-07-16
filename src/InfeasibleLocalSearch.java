@@ -16,20 +16,15 @@ public class InfeasibleLocalSearch {
         SLocalBest = S.cloneSolution();//初始局部最优解
 
         while (m < M) {
-
-            if (S.isFeasible() && S.getTotalValue() <= SLocalBest.getTotalValue()) { // 如果当前解可行且不为局部最优
-                // 应用第一类操作符
-                Neighborhood neighborhood = constructFirstTypeNeighborhoods(S);
-                Move bestNeighborMove = neighborhood.chooseBestNeighborMove(tabuList);
+            Neighborhood neighborhood = constructFirstTypeNeighborhoods(S);
+            Move bestNeighborMove = neighborhood.chooseBestNeighborMove(tabuList);
+            if (S.isFeasible()&&bestNeighborMove.getMoveGain()>0) { // 如果当前解可行且不为局部最优
+                // 应用第一类算子
                 S.applyMove(bestNeighborMove);//执行最优移动
                 tabuList.updateTabuList(bestNeighborMove); // 更新禁忌表
-
-                // 更新局部最优解
-                if (S.getTotalValue() > SLocalBest.getTotalValue()) {
-                    SLocalBest = S.cloneSolution();
-                }
+                SLocalBest = S.cloneSolution();// 更新局部最优解
             } else {
-                // 应用第二类操作符
+                // 应用第二类算子
                 Random rand = new Random();
                 Set<Knapsack> knapsacks = S.getKnapsacks();
                 Knapsack selectedKnapsack = (new ArrayList<>(knapsacks)).get(rand.nextInt(knapsacks.size()));
@@ -52,7 +47,6 @@ public class InfeasibleLocalSearch {
                 }
 //                else throw new IllegalStateException("Move is null");
             }
-
             m++;
         }
     }
@@ -78,10 +72,9 @@ public class InfeasibleLocalSearch {
             if (knapsack != selectedKnapsack && knapsack.getTotalWeight() >= selectedKnapsack.getTotalWeight()) {
                 for (Item item : knapsack.getItems()) {
                     Move move=new Move(Move.MoveType.REALLOCATION,item,null,knapsack,selectedKnapsack);
-                    move.calNormReallocationGain(solution);
-                    double gain =move.getMoveGain();
-                    if (gain > bestGain) {
-                        bestGain = gain;
+                    double normGain =move.calNormReallocationGain(solution);
+                    if (normGain > bestGain) {
+                        bestGain = normGain;
                         bestMove=move;
                     }
                 }
