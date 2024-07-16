@@ -86,42 +86,18 @@ public class Move {
     public void calculateMoveGain(Solution solution){
         double moveGain;
         ValueContributionMatrix valueContributionMatrix=TabuSearchAlgorithm.getValueContributionMatrix();//此时valueContributionMatrix还没有被更新
-//        ValueContributionMatrix cloneValueContributionMatrix;
 
         switch (moveType){
             case  EXTRACTION:
                 moveGain=-valueContributionMatrix.getValueContribution(item1,knapsack1); // 返回抽取操作的收益，为负贡献值
                 break;
             case INSERTION:
-//                cloneValueContributionMatrix=solution.getValueContributionMatrix().cloneValueContributionMatrix();
-//                cloneValueContributionMatrix.updateMatrix(this);//克隆的价值贡献矩阵模拟插入后的情况
-//                moveGain=cloneValueContributionMatrix.getValueContribution(item1,knapsack1); // 返回插入操作的收益，为正贡献值
                 moveGain= ValueContributionMatrix.computeValueContribution(item1,knapsack1);
                 break;
             case REALLOCATION:
-//                cloneValueContributionMatrix=solution.getValueContributionMatrix().cloneValueContributionMatrix();
-//                cloneValueContributionMatrix.updateMatrix(this);//克隆的价值贡献矩阵模拟重分配后的情况
-//                //公式前半部分应为重分配后的矩阵，后半部分为重分配前的矩阵
-//                moveGain=cloneValueContributionMatrix.getValueContribution(item1,knapsack2) - valueContributionMatrix.getValueContribution(item1,knapsack1); // 返回重新分配操作的收益
                 moveGain= ValueContributionMatrix.computeValueContribution(item1,knapsack2)-valueContributionMatrix.getValueContribution(item1,knapsack1);
                 break;
             case EXCHANGE:
-//                cloneValueContributionMatrix=solution.getValueContributionMatrix().cloneValueContributionMatrix();
-//                cloneValueContributionMatrix.updateMatrix(this);//克隆的价值贡献矩阵模拟交换后的情况
-//                if (knapsack2 != null) {
-//                    // 如果有两个背包，返回交换操作的收益
-////                    moveGain=cloneValueContributionMatrix.getValueContribution(item1, knapsack2) - valueContributionMatrix.getValueContribution(item1, knapsack1)
-////                            + cloneValueContributionMatrix.getValueContribution(item2, knapsack1) - valueContributionMatrix.getValueContribution(item2, knapsack2)
-////                            - 2 * item1.getQuadraticValue(item2);
-//                    moveGain=cloneValueContributionMatrix.getValueContribution(item1, knapsack2) - valueContributionMatrix.getValueContribution(item1, knapsack1)
-//                            + cloneValueContributionMatrix.getValueContribution(item2, knapsack1) - valueContributionMatrix.getValueContribution(item2, knapsack2);
-//                            //- 2 * item1.getQuadraticValue(item2)这一项在updateMatrix中考虑到了，此处不用重复考虑
-//                }
-//                else {
-//                    // 如果只有一个背包，返回交换操作的收益
-//                    moveGain= cloneValueContributionMatrix.getValueContribution(item2, knapsack1) - valueContributionMatrix.getValueContribution(item1, knapsack1)
-//                            - item1.getQuadraticValue(item2);
-//                }
                 if (knapsack2!=null){
                     // 如果有两个背包，返回交换操作的收益
                     moveGain= ValueContributionMatrix.computeValueContribution(item1,knapsack2)- valueContributionMatrix.getValueContribution(item1,knapsack1)
@@ -146,9 +122,6 @@ public class Move {
     public double calNormReallocationGain(Solution solution) {
         double beta=TabuSearchAlgorithm.BETA;
         ValueContributionMatrix valueContributionMatrix=TabuSearchAlgorithm.getValueContributionMatrix();
-//        ValueContributionMatrix valueContributionMatrix=TabuSearchAlgorithm.getValueContributionMatrix();
-//        ValueContributionMatrix cloneValueContributionMatrix=TabuSearchAlgorithm.getValueContributionMatrix().cloneValueContributionMatrix();
-//        cloneValueContributionMatrix.updateMatrix();//克隆的价值贡献矩阵模拟重分配后的情况
         moveGain= ValueContributionMatrix.computeValueContribution(item1, knapsack2) - valueContributionMatrix.getValueContribution(item1, knapsack1);
         return moveGain/ Math.pow(item1.getWeight(), beta); // 返回归一化重新分配操作的收益
     }

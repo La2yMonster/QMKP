@@ -9,7 +9,6 @@ public class InfeasibleLocalSearch {
     // 执行不可行局部搜索
     public static void performInfeasibleLocalSearch(Solution feasibleSolution, int M) {
         int m = 0;
-        ValueContributionMatrix valueContributionMatrix=TabuSearchAlgorithm.getValueContributionMatrix();
         tabuList=new TabuList();
         S = feasibleSolution;//当前解
         InfeasibleLocalSearch.initialSolution=S.cloneSolution();

@@ -66,6 +66,8 @@ public class TabuSearchAlgorithm {
 
             // Update elapsed time
             elapsedTime = System.currentTimeMillis() - startTime;
+            System.out.println("最优解："+fBest);
+            System.out.println("当前解："+S.getTotalValue());
         }
 
         return SBest;
@@ -101,6 +103,10 @@ public class TabuSearchAlgorithm {
 
     public static Solution getSLocalBest() {
         return SLocalBest;
+    }
+
+    public static long getElapsedTime() {
+        return elapsedTime;
     }
 
     public static boolean StopConditionIsNotMet(){

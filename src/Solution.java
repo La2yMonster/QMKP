@@ -3,9 +3,7 @@ import java.util.*;
 public class Solution {
     private final Set<Knapsack> knapsacks; // 解中的所有背包
     private double totalValue; // 解的总价值
-//    private Map<Knapsack, Double> knapsackOverload; // 不可行度（DI），每个背包的超载重量
     private double infeasibilityDegree; // 总不可行度（总超载部分）
-//    private  ValueContributionMatrix valueContributionMatrix;//解的价值贡献矩阵
     private Set<Item> unassignedItems;//解的没有分配物品
 
     // 构造函数，初始化解
@@ -15,20 +13,6 @@ public class Solution {
         this.totalValue=0;
         this.infeasibilityDegree=0;
         this.unassignedItems=new HashSet<>(TabuSearchAlgorithm.getAllItems());
-//        this.totalValue = knapsacks.stream().mapToDouble(Knapsack::getTotalValue).sum();// 计算总价值
-////        this.valueContributionMatrix=valueContributionMatrix;
-//        this.knapsackOverload = new HashMap<>();
-//        this.unassignedItems = new ArrayList<>(TabuSearchAlgorithm.getAllItems());
-//
-//        // 计算 totalValue 和 infeasibilityDegree以及unassignedItems
-////        this.totalValue = 0.0;
-//        this.infeasibilityDegree = 0.0;
-//        for (Knapsack knapsack : knapsacks) {
-//            double overload = Math.max(0, knapsack.getTotalWeight() - knapsack.getCapacity());
-//            knapsackOverload.put(knapsack, overload);
-//            this.infeasibilityDegree += overload;
-//            this.unassignedItems.removeAll(knapsack.getItems());// 从未分配列表中移除已分配的物品
-//        }
     }
 
     @Override
@@ -122,78 +106,6 @@ public class Solution {
         clonedSolution.updateSolution(totalValue, infeasibilityDegree, new HashSet<>(unassignedItems));
         return clonedSolution;
     }
-//    //update函数均假设move做完了，cal函数均假设move没做
-//    public void updateTotalValue(Move move){
-//        totalValue=getTotalValue()+ move.getMoveGain();
-//    }
-//
-//    public void updateInfeasibilityDegree(Move move) {
-//        Knapsack knapsack1, knapsack2;
-//        Item item1,item2;
-////        double oldOverloadKnapsack1 = 0, oldOverloadKnapsack2 = 0;
-////        double newOverloadKnapsack1 = 0, newOverloadKnapsack2 = 0;
-//        double oldOverload1,oldOverload2,newOverload1,newOverload2;
-//
-//        switch (move.getMoveType()) {
-//            case INSERTION:
-//                knapsack1 = move.getKnapsack1();
-//                item1=move.getItem1();
-//                oldOverload1=Math.max(0, knapsack1.getTotalWeight() -item1.getWeight()- knapsack1.getCapacity());
-//                newOverload1=Math.max(0, knapsack1.getTotalWeight()- knapsack1.getCapacity());
-//                infeasibilityDegree = infeasibilityDegree - oldOverload1+newOverload1;
-//            case EXTRACTION:
-//                knapsack1 = move.getKnapsack1();
-//                oldOverload1=Math.max(0, knapsack1.getTotalWeight() - knapsack1.getCapacity());
-////                oldOverloadKnapsack1 = knapsackOverload.get(knapsack1);
-////                newOverloadKnapsack1 = Math.max(0, knapsack1.getTotalWeight() - knapsack1.getCapacity());
-////                infeasibilityDegree = infeasibilityDegree - oldOverloadKnapsack1 + newOverloadKnapsack1;
-////                knapsackOverload.put(knapsack1, newOverloadKnapsack1); // 更新 overload map
-//
-//                break;
-//
-//            case REALLOCATION:
-//            case EXCHANGE:
-//                knapsack1 = move.getKnapsack1();
-//                knapsack2 = move.getKnapsack2();
-//
-//                if (knapsack2!=null){
-//                    oldOverloadKnapsack1 = knapsackOverload.get(knapsack1);
-//                    oldOverloadKnapsack2 = knapsackOverload.get(knapsack2);
-//                    newOverloadKnapsack1 = Math.max(0, knapsack1.getTotalWeight() - knapsack1.getCapacity());
-//                    newOverloadKnapsack2 = Math.max(0, knapsack2.getTotalWeight() - knapsack2.getCapacity());
-//
-//                    infeasibilityDegree = infeasibilityDegree - oldOverloadKnapsack1 - oldOverloadKnapsack2 + newOverloadKnapsack1 + newOverloadKnapsack2;
-//                    knapsackOverload.put(knapsack1, newOverloadKnapsack1); // 更新 overload map
-//                    knapsackOverload.put(knapsack2, newOverloadKnapsack2); // 更新 overload map
-//                }
-//                else {
-//                    oldOverloadKnapsack1 = knapsackOverload.get(knapsack1);
-//                    newOverloadKnapsack1 = Math.max(0, knapsack1.getTotalWeight() - knapsack1.getCapacity());
-//
-//                    infeasibilityDegree = infeasibilityDegree - oldOverloadKnapsack1 + newOverloadKnapsack1;
-//                    knapsackOverload.put(knapsack1, newOverloadKnapsack1); // 更新 overload map
-//                }
-//                break;
-//        }
-//        //        setInfeasibilityDegree(knapsacks.stream()
-//        //                .mapToDouble(k -> Math.max(0, k.getTotalWeight() - k.getCapacity()))
-//        //                .sum());// 计算解的不可行度（总超载部分）
-//    }
-
-//    // 克隆解
-//    public Solution cloneSolution() {
-//        List<Knapsack> originalKnapsacks = this.getKnapsacks();
-//        List<Knapsack> clonedKnapsacks = new ArrayList<>();
-////        ValueContributionMatrix cloneValueContributionMatrix=this.getValueContributionMatrix().cloneValueContributionMatrix();
-//        for (Knapsack knapsack : originalKnapsacks) {
-//            Knapsack clonedKnapsack = new Knapsack(knapsack.getId(), knapsack.getCapacity());
-//            clonedKnapsack.getItems().addAll(knapsack.getItems());
-//            clonedKnapsacks.add(clonedKnapsack);
-//        }
-//        Solution cloneSolution=new Solution(clonedKnapsacks);
-////        cloneSolution.setTotalValue(totalValue);
-//        return cloneSolution;
-//    }
 
     // 在解中根据ID查找背包
     public Knapsack findKnapsackById(int id) {
@@ -209,11 +121,6 @@ public class Solution {
     public boolean isFeasible() {
         return infeasibilityDegree == 0;
     }
-
-
-
-
-
 
     // 覆盖toString方法，返回解的字符串表示
     @Override

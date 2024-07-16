@@ -37,14 +37,6 @@ public class MoveOperator {
             matrix.get(jId).put(knapsackId, matrix.get(jId).get(knapsackId) - item.getQuadraticValue(j));
         }
         matrix.get(itemId).put(knapsackId, 0.0); // 更新item在knapsack中的贡献值为0
-
-//        Set<Item> unassignedItems=solution.getUnassignedItems();
-
-//        knapsack.getItems().remove(item);
-//        unassignedItems.add(item);
-//        solution.getValueContributionMatrix().updateMatrix(move);
-//        solution.updateTotalValue(move);
-//        solution.updateInfeasibilityDegree(move);
     }
 
     // 插入操作：将物品插入到背包中
@@ -82,15 +74,6 @@ public class MoveOperator {
             }
         }
         matrix.get(itemId).put(knapsackId, ValueContributionMatrix.computeValueContribution(item, knapsack)); // 计算并更新item在knapsack中的贡献值
-
-
-//        List<Item> unassignedItems=solution.getUnassignedItems();
-//
-//        unassignedItems.remove(item);
-//        knapsack.getItems().add(item);
-//        solution.getValueContributionMatrix().updateMatrix(move);
-//        solution.updateTotalValue(move);
-//        solution.updateInfeasibilityDegree(move);
     }
 
     // 判断是否可以插入物品到背包中（不超过背包容量）
@@ -152,15 +135,6 @@ public class MoveOperator {
             }
         }
         matrix.get(itemId).put(knapsack2Id, ValueContributionMatrix.computeValueContribution(item, knapsack2)); // 计算并更新item在knapsack2中的贡献值
-
-//        double knapsack2TotalWeight=knapsack2.getTotalWeight()+item.getWeight();
-//        double knapsack1TotalValue=knapsack1.getTotalValue()-item.getValue()
-
-//        fromKnapsack.getItems().remove(item);
-//        toKnapsack.getItems().add(item);
-//        solution.getValueContributionMatrix().updateMatrix(move);
-//        solution.updateTotalValue(move);
-//        solution.updateInfeasibilityDegree(move);
     }
 
     // 判断是否可以将物品从一个背包重新分配到另一个背包（不超过目标背包的容量）
@@ -250,10 +224,6 @@ public class MoveOperator {
             matrix.get(item2Id).put(knapsack2Id, 0.0); // 更新item2在knapsack2中的贡献值为0
             matrix.get(item1Id).put(knapsack2Id, ValueContributionMatrix.computeValueContribution(item1, knapsack2)); // 计算并更新item1在knapsack2中的贡献值
         }
-
-//        solution.getValueContributionMatrix().updateMatrix(move);
-//        solution.updateTotalValue(move);
-//        solution.updateInfeasibilityDegree(move);
     }
 
 

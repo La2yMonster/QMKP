@@ -45,36 +45,15 @@ public class Knapsack {
 
     // 获取背包中的物品总重量
     public double getTotalWeight() {
-//        totalWeight=items.stream().mapToDouble(Item::getWeight).sum();
         return totalWeight;
     }
 
     public void setTotalWeight(double totalWeight) {
         this.totalWeight = totalWeight;
     }
-    //    //根据move更新背包的重量，并返回更新后的重量
-//    public void updateTotalWeight(Move move){
-//        totalWeight+=
-//    }
 
     // 获取背包中的物品总价值，包括二次价值
     public double getTotalValue() {
-//        double totalValue = items.stream().mapToDouble(Item::getValue).sum();
-//        double quadraticValue = 0.0;
-//
-//        // 计算二次价值
-//        for (Item item1 : items) {
-//            for (Item item2 : items) {
-//                if (!item1.equals(item2)) {
-//                    quadraticValue += item1.getQuadraticValue(item2);
-//                }
-//            }
-//        }
-//
-//        // 每个配对的二次价值都计算了两次，除以2以得到正确的值
-//        quadraticValue /= 2.0;
-//
-//        return totalValue + quadraticValue;
         return totalValue;
     }
 

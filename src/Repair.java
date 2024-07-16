@@ -22,18 +22,6 @@ public class Repair {
         for (Move move : neighborhood.getMoves()) { // 遍历所有操作
             double moveGain = move.getMoveGain(); // 获取操作增益
             double newInfeasibilityDegree=calNewInfeasibilityDegree(solution,move);
-//            Solution newSolution = solution.cloneSolution();
-//            Knapsack clonedKnapsack1=newSolution.findKnapsackById(move.getKnapsack1().getId());
-//            Knapsack clonedKnapsack2=null;
-//
-//            if (move.getKnapsack2()!=null){
-//                clonedKnapsack2=newSolution.findKnapsackById(move.getKnapsack2().getId());
-//            }
-//
-//            Move clonedMove=new Move(move.getMoveType(),move.getItem1(),move.getItem2(),clonedKnapsack1,clonedKnapsack2);
-//            newSolution.applyMove(clonedMove); // 应用操作到新解
-//            double newInfeasibilityDegree = newSolution.getInfeasibilityDegree(); // 获取新解的不可行度
-
             // 检查是否改进了不可行度
             if (newInfeasibilityDegree < currentInfeasibilityDegree && moveGain > bestMoveGain) {
                 bestMoveGain = moveGain; // 更新最优增益
