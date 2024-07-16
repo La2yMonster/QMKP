@@ -57,6 +57,7 @@ public class QMKPInstance {
                             Item item2=items.get(index-2+i);
                             item1.setQuadraticValue(item2,reader_double);
                             item2.setQuadraticValue(item1,reader_double);
+                            item1.setQuadraticValue(item1,0);
                         } catch (NumberFormatException e) {
                             System.err.println("Error: Invalid input for parsing double at index " + i + ". Input string: '" + itemQuadraticProfit[i] + "'");
                             e.printStackTrace();

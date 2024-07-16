@@ -1,21 +1,22 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class InitialSolutionGenerator {
     // 生成初始解
-    public static Solution generateInitialSolution(List<Item> items, List<Knapsack> knapsacks) {
+    public static Solution generateInitialSolution(Set<Item> items, Set<Knapsack> knapsacks) {
         Random random = new Random();
-        ValueContributionMatrix valueContributionMatrix=new ValueContributionMatrix(items, knapsacks);
+//        ValueContributionMatrix valueContributionMatrix=new ValueContributionMatrix(items, knapsacks);
 //        Solution initialSolution=new Solution(knapsacks,valueContributionMatrix);
         Solution initialSolution=new Solution(knapsacks);
-        List<Item> unassignedItems = initialSolution.getUnassignedItems();
+        Set<Item> unassignedItems = initialSolution.getUnassignedItems();
 
         // 遍历每一个背包
         for (Knapsack knapsack : knapsacks) {
             // 随机选择一个未分配的物品放入当前背包
             if (!unassignedItems.isEmpty()) {
-                Item randomItem = unassignedItems.get(random.nextInt(unassignedItems.size()));
+                Item randomItem = (new ArrayList<>(unassignedItems)).get(random.nextInt(unassignedItems.size()));
                 Move move=new Move(Move.MoveType.INSERTION,randomItem,null,knapsack,null);
                 move.calculateMoveGain(initialSolution);
                 initialSolution.applyMove(move);
@@ -23,7 +24,7 @@ public class InitialSolutionGenerator {
 
             boolean canAddMoreObjects = true;
             while (canAddMoreObjects) {
-                Move bestMove = null;  // 最佳物品
+                Move bestMove = null;  // 最佳插入操作
                 double bestDensity = Double.NEGATIVE_INFINITY;  // 最佳物品的价值密度
 
                 // 遍历未分配的物品列表，寻找最适合当前背包的物品

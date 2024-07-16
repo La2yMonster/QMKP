@@ -1,15 +1,19 @@
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TabuSearchAlgorithm {
 
     public static final int Ncons = 1000; // The search depth of each FLS phase
     public static final int M = 600;//Maximum number of iterations of each ILS phase
     public static final long TIME_LIMIT = 10 * 60; // 停止条件，时间限制，单位为毫秒
+    public static final double ALPHA = 0.1; // Tabu tenure management factor
     public static final double BETA = 0.7; // Weight factor
 
-    private static List<Item> allItems;
-    private static List<Knapsack> allKnapsacks;
+    private static Set<Item> allItems;
+    private static Set<Knapsack> allKnapsacks;
     private static Solution initialSolution;
+    private static ValueContributionMatrix valueContributionMatrix;//价值贡献矩阵
     private static Solution SBest; // 最佳解
     private static double fBest; // 最佳目标值
     private static Solution S;//当前解
@@ -17,8 +21,9 @@ public class TabuSearchAlgorithm {
     private static long elapsedTime;//算法执行的时间
 
     public static Solution findBestSolution(QMKPInstance qmkpInstance) {
-        allItems = qmkpInstance.getItems();
-        allKnapsacks = qmkpInstance.getKnapsacks();
+        allItems = new HashSet<>(qmkpInstance.getItems());
+        allKnapsacks = new HashSet<>(qmkpInstance.getKnapsacks());
+        valueContributionMatrix=new ValueContributionMatrix(allItems, allKnapsacks);
 
         long startTime = System.currentTimeMillis(); // 记录开始时间
         elapsedTime = 0; // 记录经过的时间
@@ -64,12 +69,16 @@ public class TabuSearchAlgorithm {
         return SBest;
     }
 
-    public static List<Item> getAllItems() {
+    public static Set<Item> getAllItems() {
         return allItems;
     }
 
-    public static List<Knapsack> getAllKnapsacks() {
+    public static Set<Knapsack> getAllKnapsacks() {
         return allKnapsacks;
+    }
+
+    public static ValueContributionMatrix getValueContributionMatrix() {
+        return valueContributionMatrix;
     }
 
     public static Solution getInitialSolution() {

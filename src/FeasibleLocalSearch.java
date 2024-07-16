@@ -8,7 +8,7 @@ public class FeasibleLocalSearch {
     // 执行可行局部搜索
     public static void performFeasibleLocalSearch(Solution initialSolution, int Ncons) {
         int n = 0; // 计数器
-        ValueContributionMatrix valueContributionMatrix=initialSolution.getValueContributionMatrix();
+//        ValueContributionMatrix valueContributionMatrix=TabuSearchAlgorithm.getValueContributionMatrix();
         TabuList tabuList=new TabuList();
         S=initialSolution;//当前解
         FeasibleLocalSearch.initialSolution=S.cloneSolution();// 初始解

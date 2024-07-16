@@ -1,35 +1,37 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Neighborhood {
     private Solution solution; // 当前解
-    private List<Move> moves; // 产生邻居解的移动操作
+    private Set<Move> moves; // 产生邻居解的移动操作
 
     public Neighborhood(Solution solution) {
         this.solution = solution;
-        this.moves=new ArrayList<>();
+        this.moves=new HashSet<>();
     }
 
     public Solution getSolution() {
         return solution;
     }
 
-    public List<Move> getMoves() {
+    public Set<Move> getMoves() {
         return moves;
     }
 
-    public void setMoves(List<Move> moves) {
+    public void setMoves(Set<Move> moves) {
         this.moves = moves;
     }
 
-    public void addMoves(List<Move> moves) {
+    public void addMoves(Set<Move> moves) {
         this.moves.addAll(moves);
     }
 
     // 生成抽取邻域
-    public static List<Move> generateExtractionNeighborhoodMoves(Solution solution) {
-        List<Move> moves=new ArrayList<>();
-        List<Knapsack> knapsacks=solution.getKnapsacks();
+    public static Set<Move> generateExtractionNeighborhoodMoves(Solution solution) {
+        Set<Move> moves=new HashSet<>();
+        Set<Knapsack> knapsacks=solution.getKnapsacks();
         for (Knapsack knapsack : knapsacks) {
             for (Item item : knapsack.getItems()) {
                 Move move = new Move(Move.MoveType.EXTRACTION, item, null, knapsack, null);
@@ -41,9 +43,9 @@ public class Neighborhood {
     }
 
     // 生成插入邻域
-    public static List<Move> generateInsertionNeighborhoodMoves(Solution solution) {
-        List<Move> moves=new ArrayList<>();
-        List<Knapsack> knapsacks=solution.getKnapsacks();
+    public static Set<Move> generateInsertionNeighborhoodMoves(Solution solution) {
+        Set<Move> moves=new HashSet<>();
+        Set<Knapsack> knapsacks=solution.getKnapsacks();
 
         for (Knapsack knapsack : knapsacks) {
             for (Item item : solution.getUnassignedItems()) {
@@ -58,9 +60,9 @@ public class Neighborhood {
     }
 
     // 生成重分配邻域
-    public static List<Move> generateReallocationNeighborhoodMoves(Solution solution) {
-        List<Move> moves=new ArrayList<>();
-        List<Knapsack> knapsacks=solution.getKnapsacks();
+    public static Set<Move> generateReallocationNeighborhoodMoves(Solution solution) {
+        Set<Move> moves=new HashSet<>();
+        Set<Knapsack> knapsacks=solution.getKnapsacks();
 
         for (Knapsack fromKnapsack : knapsacks) {
             for (Item item : fromKnapsack.getItems()) {
@@ -77,9 +79,9 @@ public class Neighborhood {
     }
 
     // 生成交换邻域
-    public static List<Move> generateExchangeNeighborhoodMoves(Solution solution) {
-        List<Move> moves=new ArrayList<>();
-        List<Knapsack> knapsacks=solution.getKnapsacks();
+    public static Set<Move> generateExchangeNeighborhoodMoves(Solution solution) {
+        Set<Move> moves=new HashSet<>();
+        List<Knapsack> knapsacks=new ArrayList<>(solution.getKnapsacks());
 
         for (int i = 0; i < knapsacks.size(); i++) {
             Knapsack knapsack1 = knapsacks.get(i);
