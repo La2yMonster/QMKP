@@ -6,7 +6,7 @@ public class TabuSearchAlgorithm {
 
     public static final int Ncons = 1000; // The search depth of each FLS phase
     public static final int M = 600;//Maximum number of iterations of each ILS phase
-    public static final long TIME_LIMIT = 1000 * 60; // 停止条件，时间限制，单位为毫秒，1秒为1000毫秒
+    public static final long TIME_LIMIT = 1000 * 60*60; // 停止条件，时间限制，单位为毫秒，1秒为1000毫秒
     public static final double ALPHA = 0.1; // Tabu tenure management factor
     public static final double BETA = 0.7; // Weight factor
 
